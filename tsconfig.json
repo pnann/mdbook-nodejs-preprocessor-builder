@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es6",
+    "lib": [
+      "es5",
+      "es6"
+    ],
+    "inlineSourceMap": true,
+    "outDir": "lib",
+    "declaration": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "src",
+    "tst"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

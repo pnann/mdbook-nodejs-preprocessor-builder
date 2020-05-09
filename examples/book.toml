@@ -1,0 +1,13 @@
+[book]
+authors = ["pnann"]
+language = "en"
+multilingual = false
+src = "book-src"
+title = "Raw Processor Example"
+
+[output.html]
+default-theme = "rust"
+
+[preprocessor.spells]
+command = "node ./processor.js"
+renderer = ["html"]
