@@ -1,13 +1,13 @@
 {
   "name": "mdbook-nodejs-preprocessor-builder",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Paul Nann (pnann)",
   "license": "MIT",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "tsc && nyc umbra",
+    "test": "tsc && nyc npx umbra",
     "lint": "tslint --project .",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "all": "npm run build && npm run test && npm run lint && npm run coveralls"
@@ -40,14 +40,9 @@
   },
   "devDependencies": {
     "@types/logfmt": "^1.2.1",
-    "@types/mocha": "^7.0.2",
-    "@types/node": "^13.13.5",
-    "@umbra-test/umbra-test-runner": "0.0.2",
-    "@umbra-test/umbra-util": "0.0.3",
-    "nyc": "^15.0.1",
-    "typescript": "^3.8.3",
-    "umbra-test": "0.0.3",
-    "umbra-assert": "^0.0.3",
-    "umbra-test-mock": "^0.0.2"
+    "@types/node": "^14.0.14",
+    "nyc": "^15.1.0",
+    "typescript": "^3.9.5",
+    "umbra-test": "0.0.9"
   }
 }

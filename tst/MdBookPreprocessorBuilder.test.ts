@@ -1,8 +1,9 @@
+import {assert, expect, mock} from "umbra-test";
+
 import {MdBookPreprocessorBuilder} from "../src/MdBookPreprocessorBuilder";
 import {RegExpHandler, RegExpProcessor} from "../src/Processors/RegExpProcessor";
 import {SimpleSocketDataReader} from "../src/SimpleSocketDataReader";
 import {KeyValueHandler, KeyValueProcessor} from "../src/Processors/KeyValueProcessor";
-import {assert, expect, mock} from "umbra-test";
 import {Book, Chapter} from "../src/PreprocessorInput";
 import {RawContentHandler, RawContentProcessor} from "../src/Processors/RawContentProcessor";
 
@@ -67,7 +68,6 @@ describe("MdBookPreprocessorBuilder", () => {
         });
     });
 
-
     describe("withRegExpHandler", () => {
         it("should pass the values directly to the RegExpProcessor", () => {
             const regExp = /some-random-regexp/gi;
@@ -85,6 +85,41 @@ describe("MdBookPreprocessorBuilder", () => {
             expect(keyValueProcessor.addHandler).withArgs(macroName, handler);
 
             builder.withKeyValueHandler(macroName, handler);
+        });
+    });
+
+    describe("support mode", () => {
+        beforeEach(() => {
+            argv.push("node", "index.js", "supports", "html");
+        });
+
+        it("should exit with code 1 if the requested type wasn't added", () => {
+            argv.pop();
+            expect(exitProcess).withArgs(1);
+            return builder.ready();
+        });
+
+        it("should exit with code 1 if no renderer support was added", () => {
+            expect(exitProcess).withArgs(1);
+            return builder.ready();
+        });
+
+        it("should exit with code 0 if only one type was added, and it matches", () => {
+            builder.withRendererSupport("html");
+            expect(exitProcess).withArgs(0);
+            return builder.ready();
+        });
+
+        it("should exit with code 0 if multiple types were added, and one matches", () => {
+            builder.withRendererSupport("md", "xml", "html");
+            expect(exitProcess).withArgs(0);
+            return builder.ready();
+        });
+
+        it("should exit with code 0 if the type matches, regardless of casing", () => {
+            builder.withRendererSupport("md", "xml", "HtMl");
+            expect(exitProcess).withArgs(0);
+            return builder.ready();
         });
     });
 
@@ -158,41 +193,6 @@ describe("MdBookPreprocessorBuilder", () => {
             expect(json.stringify).withArgs(expectedBook).andReturn(finalString);
             expect(stdout.write).withArgs(finalString);
 
-            return builder.ready();
-        });
-    });
-
-    describe("support mode", () => {
-        beforeEach(() => {
-            argv.push("node", "index.js", "supports", "html");
-        });
-
-        it("should exit with code 1 if the requested type wasn't added", () => {
-            argv.pop();
-            expect(exitProcess).withArgs(1);
-            return builder.ready();
-        });
-
-        it("should exit with code 1 if no renderer support was added", () => {
-            expect(exitProcess).withArgs(1);
-            return builder.ready();
-        });
-
-        it("should exit with code 0 if only one type was added, and it matches", () => {
-            builder.withRendererSupport("html");
-            expect(exitProcess).withArgs(0);
-            return builder.ready();
-        });
-
-        it("should exit with code 0 if multiple types were added, and one matches", () => {
-            builder.withRendererSupport("md", "xml", "html");
-            expect(exitProcess).withArgs(0);
-            return builder.ready();
-        });
-
-        it("should exit with code 0 if the type matches, regardless of casing", () => {
-            builder.withRendererSupport("md", "xml", "HtMl");
-            expect(exitProcess).withArgs(0);
             return builder.ready();
         });
     });
